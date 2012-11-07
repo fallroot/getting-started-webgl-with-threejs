@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pudding.to Photos</title>
+        <link rel="stylesheet" href="css/globe.css">
+    </head>
+    <body>
+        <div id="container"></div>
+        <div id="info">
+          The <a href="http://www.chromeexperiments.com/globe">WebGL Globe</a> is an
+          open platform for visualizing geographic data. <span
+            class="bull">&bull;</span> <a href="http://code.google.com/p/webgl-globe/">Get
+          the code</a> <span class="bull">&bull;</span> By the Google Data Arts Team</a>
+        </div>
+        <div id="title">Pudding.to Photos</div>
+        <a id="ce" href="http://www.chromeexperiments.com/globe">
+          <span>This is a Chrome Experiment</span>
+        </a>
+        <script src="js/ThreeWebGL.js"></script>
+        <script src="js/ThreeExtras.js"></script>
+        <script src="js/RequestAnimationFrame.js"></script>
+        <script src="js/Detector.js"></script>
+        <script src="js/globe.js"></script>
+        <script>
+            var container = document.getElementById('container'),
+                globe     = new DAT.Globe(container),
+                xhr;
+
+            xhr = new XMLHttpRequest();
+            xhr.open('GET', 'data/puddingto.json', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        globe.addData(data, {format: 'magnitude'});
+                        globe.createPoints();
+                        globe.animate();
+                    }
+                }
+            };
+            xhr.send(null);
+        </script>
+    </body>
+</html>

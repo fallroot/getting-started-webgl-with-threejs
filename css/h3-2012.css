@@ -1,0 +1,324 @@
+html, body, section, div, p, pre, code, img,
+ol, ul, li,
+figure, figcaption {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #000;
+    color: #333;
+    font: 36px/2 "Source Sans Pro", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.reveal.page .slides {
+    margin-top: -360px;
+}
+.reveal.page .slides > section {
+    background: #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 100%;
+    padding: 0;
+    width: 100%;
+}
+.reveal ol, .reveal ul {
+    line-height: 2em;
+}
+.reveal pre, .reveal iframe {
+    background: #eee;
+    height: 600px;
+    width: 800px;
+}
+.reveal code, .reveal iframe {
+    border: 1px solid #ccc;
+}
+.reveal pre {
+    position: static;
+}
+.reveal code {
+    background: #002451;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    color: #fff;
+    font-family: Inconsolata, monospace;
+    height: 100%;
+    line-height: 1.5em;
+    max-height: none;
+    padding: 20px;
+}
+.reveal h1 + pre, .reveal h1 + iframe {
+    display: block;
+    height: 500px;
+    margin: 0 auto;
+}
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    font-family: inherit;
+    font-weight: bold;
+    text-transform: none;
+}
+.reveal h2 {
+    font-size: 48px;
+}
+.reveal section img {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+    max-width: 800px;
+}
+.reveal section img + p {
+}
+.reveal section em {
+    color: #1d6e99;
+}
+.reveal section .overlay em {
+    color: #71accc;
+}
+.reveal .progress span {
+    background: #f15023;
+}
+.reveal .slides > section a {
+    color: inherit;
+    text-decoration: underline;
+}
+.reveal .slides > section.intro {
+    background: url(/img/backgrounds/intro.jpg) no-repeat right bottom;
+    padding-left: 50px;
+}
+.reveal .slides > section.intro h1 {
+    background: none;
+    color: #000;
+    font-size: 90px;
+    height: auto;
+    line-height: 1.25em;
+    margin: 50px 0 20px;
+    text-align: left;
+    text-shadow: 1px 1px 0 #333,
+                 2px 2px 2px rgba(0, 0, 0, .25),
+                 3px 3px 3px rgba(0, 0, 0, .5);
+}
+.reveal .slides > section.intro h1 b {
+    color: #f15023;
+}
+.reveal .slides > section.intro h2 {
+    color: #666;
+    font-size: 24px;
+    text-align: left;
+}
+.reveal .slides > section.thankyou {
+    background: url(/img/backgrounds/thankyou.jpg) no-repeat center center;
+}
+.reveal .slides > section.thankyou h1 {
+    background: none;
+    color: #fff;
+    font-size: 64px;
+    margin: 400px auto 50px;
+    padding: 0;
+    text-align: center;
+    text-shadow: none;
+}
+.reveal .slides > section.thankyou h2 {
+    color: #fff;
+    font-size: 32px;
+    line-height: 1.5em;
+}
+.reveal .slides > section.title h1 {
+    background: #fff;
+    color: #f15023;
+    font-size: 96px;
+    margin-top: 35%;
+    padding: 0;
+    text-align: center;
+    text-shadow: 1px 1px 0 #666,
+                 2px 2px 2px rgba(0, 0, 0, .25),
+                 3px 3px 3px rgba(0, 0, 0, .5);
+}
+.reveal section[data-font-size="xx-small"] pre,
+.reveal section[data-font-size="xx-small"] code {
+    font-size: 16px;
+}
+.reveal section[data-font-size="x-small"] pre,
+.reveal section[data-font-size="x-small"] code {
+    font-size: 20px;
+}
+.reveal section[data-font-size="small"] pre,
+.reveal section[data-font-size="small"] code {
+    font-size: 24px;
+}
+.reveal section[data-font-size="medium"] pre,
+.reveal section[data-font-size="medium"] code {
+    font-size: 28px;
+}
+.reveal section[data-font-size="large"] pre,
+.reveal section[data-font-size="large"] code {
+    font-size: 32px;
+}
+
+/* slide */
+.reveal .slides {
+    height: 720px;
+    margin-top: -360px;
+    max-width: none;
+    padding: 0;
+    width: 960px;
+}
+.reveal .slides > section {
+    background: #fff;
+    border-radius: 20px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 100%;
+    padding: 0 50px;
+    width: 100%;
+}
+
+/* fullscreen */
+.reveal .slides > section[data-background=full],
+.reveal .slides > section[data-fullscreen] {
+    background: none;
+    padding: 0;
+}
+.reveal section[data-fullscreen] iframe, .reveal section[data-fullscreen] img {
+    border: 0;
+    border-radius: 20px;
+    height: 100%;
+    max-width: none;
+    width: 100%;
+}
+
+/* header */
+.slides > section h1 {
+    color: #f15023;
+    font-size: 80px;
+    font-weight: bolder;
+    margin: 40px 0;
+}
+.slides > section h1 sub {
+    color: #f19323;
+    font-size: 48px;
+    margin-left: 1em;
+}
+.slides > section h2 {
+    color: #1d6e99;
+}
+
+/* backgrounds */
+[data-background=full] {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    color: #fff;
+}
+[data-background=full] h1 {
+    background: none;
+}
+
+/* list */
+.reveal ol, .reveal ul {
+    list-style: none;
+    margin: 0;
+}
+.reveal li {
+    background: url(/img/h3/square.png) no-repeat left center;
+    padding-left: 32px;
+}
+.reveal section[data-dual-column] ul {
+    display: block;
+    -webkit-column-count: 2;
+}
+.reveal ol + p, .reveal ul + p {
+    margin-top: 30px;
+}
+
+.reveal li em {
+    font-style: normal;
+    font-weight: bold;
+}
+
+/* overlay */
+.overlay {
+    background: rgba(0, 0, 0, .8);
+    position: absolute;
+    overflow: none;
+    text-align: center;
+}
+.overlay.right {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 100%;
+    padding: 20px;
+    right: 0;
+    top: 0;
+    width: 60%;
+}
+
+/* browser */
+.reveal .browser-support {
+    font: bold 32px "Arial Black";
+    margin: 100px auto 0;
+}
+.reveal .browser-support tr {
+}
+.reveal .browser-support th,
+.reveal .browser-support td {
+    text-align: center;
+}
+.reveal .browser-support th {
+    padding: 50px 20px 0;
+    vertical-align: top;
+}
+.reveal .browser-support td {
+    background-repeat: no-repeat;
+    background-position: top center;
+    padding: 150px 0 60px;
+    vertical-align: middle;
+    width: 150px;
+}
+.reveal .browser-support .desktop .ie {
+    background-image: url(/img/logos/ie-128.png);
+}
+.reveal .browser-support .chrome {
+    background-image: url(/img/logos/chrome-128.png);
+}
+.reveal .browser-support .firefox {
+    background-image: url(/img/logos/firefox-128.png);
+}
+.reveal .browser-support .desktop .safari {
+    background-image: url(/img/logos/safari-128.png);
+}
+.reveal .browser-support .mobile .android {
+    background-image: url(/img/logos/android-128.png);
+}
+.reveal .browser-support .mobile .safari {
+    background-image: url(/img/logos/mobile-safari-128.png);
+}
+.reveal .browser-support .not-yet {
+    -webkit-filter: grayscale(1);
+}
+
+/* figure */
+.reveal figcaption {
+    margin-top: 10px;
+}
+.reveal figcaption p {
+    margin: 0;
+}
+.reveal figcaption p + p {
+    color: #666;
+    font-size: 20px;
+}
+
+/* caption */
+.reveal li sub {
+    color: #1d6e99;
+    font-size: 28px;
+    margin-left: 1em;
+}
+.reveal .slides li sub a {
+    color: #666;
+}
+
+#references ul, #attributions ul {
+    line-height: 1em;
+}
+#references li a, #attributions li a {
+    font-size: 20px;
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>H3 Lottery 2011</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/h3-lottery.css">
+    </head>
+    <body>
+        <footer>
+            <p><a href="http://mrdoob.github.com/three.js/">Three.js</a> Lottery Wheel by <a href="http://twitter.com/fallroot">@fallroot</a> in <a href="https://github.com/fallroot/threejs-lottery-wheel">GitHub</a></p>
+            <button id="draw">추첨</button>
+        </footer>
+        <script src="js/three.min.js"></script>
+        <script src="js/lottery.js"></script>
+        <script>
+            Lottery.init({
+                digit: 4
+            });
+
+            document.getElementById('draw').addEventListener('click', function() {
+                Lottery.draw();
+            });
+        </script>
+    </body>
+</html>

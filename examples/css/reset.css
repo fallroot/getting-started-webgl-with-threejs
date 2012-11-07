@@ -1,0 +1,19 @@
+html, body, canvas, div, p,
+form, input, label {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font: bold 24px "Segoe UI", "Source Sans Pro", sans-serif;
+    overflow: hidden;
+}
+.caption {
+    color: #1d6e99;
+    font-size: 24px;
+    font-weight: bolder;
+    height: 50px;
+    line-height: 50px;
+    position: absolute;
+    text-align: center;
+    width: 200px;
+}

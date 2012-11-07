@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello, WebGL!</title>
+        <link rel="stylesheet" href="css/reset.css">
+    </head>
+    <body>
+        <canvas id="webgl-canvas" width="800" height="500"></canvas>
+        <script id="vertex-source" type="x-shader/x-vertex">
+            attribute vec2 pos;
+            void main() {
+                gl_Position = vec4(pos, 0, 1);
+            }
+        </script>
+        <script id="fragment-source" type="x-shader/x-fragment">
+            void main() {
+                gl_FragColor = vec4(.12, .44, .6, 1);
+            }
+        </script>
+        <script>
+            var canvas, gl, program;
+
+            function initWebGL() {
+                canvas  = document.getElementById('webgl-canvas');
+                gl      = canvas.getContext('experimental-webgl');
+                program = gl.createProgram();
+            }
+
+            function initBuffer() {
+                var vertexPosBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
+
+                var vertices = [-.5, -.5, .5, -.5, 0, .5];
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+            }
+
+            function createShader(source, type) {
+                var shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
+            }
+
+            function attachShader() {
+                var vs = document.getElementById('vertex-source').innerHTML;
+                var fs = document.getElementById('fragment-source').innerHTML;
+
+                var vshader = createShader(vs, gl.VERTEX_SHADER);
+                var fshader = createShader(fs, gl.FRAGMENT_SHADER);
+
+                gl.attachShader(program, vshader);
+                gl.attachShader(program, fshader);
+            }
+
+            function draw() {
+                gl.linkProgram(program);
+                gl.useProgram(program);
+
+                program.vertexPosAttrib = gl.getAttribLocation(program, 'pos');
+                gl.enableVertexAttribArray(program.vertexPosAttrib);
+                gl.vertexAttribPointer(program.vertexPosAttrib, 2, gl.FLOAT, false, 0, 0);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 3);
+            }
+
+            initWebGL();
+            initBuffer();
+            attachShader();
+            draw();
+        </script>
+    </body>
+</html>

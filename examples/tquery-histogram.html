@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Audio Histogram - tQuery</title>
+    </head>
+    <body>
+        <script src="js/tquery-bundle.min.js"></script>
+        <script src="js/webaudio.js"></script>
+        <script>
+            var webaudio = new WebAudio();
+
+            var sound = webaudio.createSound().load('audio/CCmixter.org.mp3', function(sound){
+                sound.loop(true).play();
+            });
+
+            var world = tQuery.createWorld().boilerplate().start();
+
+            world.renderer().setClearColorHex(0x000000, world.renderer().getClearAlpha());
+
+            tQuery.createAmbientLight().addTo(world).color(0x888888);
+            tQuery.createDirectionalLight().addTo(world).position(+1, +1, 1).color(0x88FF88);
+            tQuery.createDirectionalLight().addTo(world).position(-1, -1, 1).color(0x8888FF);
+
+            var nBar = 41;
+            var barW = 80 / nBar;
+            var bars3d  = [];
+
+            var group3d = tQuery.createObject3D().scale(1 / 20).addTo(world);
+
+            for (var i = 0; i < nBar; i++) {
+                var bar3d   = tQuery.createCube(barW, 10, 5, new THREE.MeshLambertMaterial({
+                    ambient: 0x888888,
+                    color  : 0xFFFFFF
+                }));
+                bar3d.addTo(group3d).position((i - nBar / 2) * barW, 0, 0);
+                bars3d.push(bar3d);
+            }
+
+            world.loop().hook(function(){
+                if (sound.isPlayable() === false) return;
+
+                var nBarHalf = Math.ceil(nBar/2)
+                var histo    = sound.makeHistogram(nBarHalf);
+
+                bars3d.forEach(function(bar3d, barIdx){
+                    var histoIdx = barIdx < nBarHalf ? nBarHalf - 1 - barIdx : barIdx - nBarHalf;
+                    var height   = histo[histoIdx] / 256;
+                    bar3d.get(0).scale.y = height * 3;
+                    bar3d.get(0).material.color.setHSV(0.3 + height * 0.7, 1, 1);
+                });
+            });
+        </script>
+    </body>
+</html>

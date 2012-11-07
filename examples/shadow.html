@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Shadow - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, scene, camera, mesh;
+
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(innerWidth, innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 1, 10000);
+            camera.position.set(200, 400, 400);
+
+            var scene = new THREE.Scene();
+            var cube = new THREE.Mesh(
+                new THREE.CubeGeometry(60, 60, 60),
+                new THREE.MeshLambertMaterial({
+                    color: 0xf15023
+                })
+            );
+            scene.add(cube);
+
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+
+            var plane = new THREE.Mesh(
+                new THREE.PlaneGeometry(400, 400, 10, 10),
+                new THREE.MeshLambertMaterial({color: 0xffffff})
+            );
+            plane.position.set(0, -25, -25);
+            plane.rotation.x = -Math.PI / 2;
+            plane.receiveShadow = true;
+            scene.add(plane);
+
+            var light = new THREE.SpotLight();
+            light.castShadow = true;
+            light.position.set(100, 500, 100);
+            scene.add(light);
+
+            var cone = new THREE.Mesh(
+                new THREE.CylinderGeometry(1, 40, 50, 32, 32),
+                new THREE.MeshLambertMaterial({color: 0xffffff})
+            );
+            cone.position.y = 50;
+            cone.castShadow = true;
+            scene.add(cone);
+
+            renderer.shadowMapEnabled = true;
+
+            var clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                var elapsed = clock.getElapsedTime();
+
+                cone.position.x = Math.cos(elapsed * 2) * 85;
+                cone.position.z = Math.sin(elapsed * 2) * 85;
+
+                cone.rotation.x = elapsed * 3;
+                cone.rotation.y = elapsed * 3;
+
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+    </script>
+    </body>
+</html>
