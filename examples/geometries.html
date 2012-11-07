@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Geometries - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script>
+            var camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 10000);
+            camera.position.z = 1000;
+
+            var geometries = [];
+
+            geometries.push(new THREE.CircleGeometry(100));
+            geometries.push(new THREE.CubeGeometry(100, 200, 100));
+            geometries.push(new THREE.CylinderGeometry(50, 100, 100));
+            geometries.push(new THREE.IcosahedronGeometry(100, 1));
+
+            var points = [];
+
+            for (var i = 0; i < 10; i ++) {
+                points.push(new THREE.Vector3(50, 0, i * 10));
+            }
+            geometries.push(new THREE.LatheGeometry(points));
+
+            geometries.push(new THREE.OctahedronGeometry(100));
+            geometries.push(new THREE.PlaneGeometry(100, 200));
+            geometries.push(new THREE.SphereGeometry(100));
+            geometries.push(new THREE.TetrahedronGeometry(100));
+            geometries.push(new THREE.TorusGeometry(100));
+            geometries.push(new THREE.TorusKnotGeometry(50));
+
+            var scene = new THREE.Scene();
+
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(innerWidth, innerHeight);
+
+            document.body.appendChild(renderer.domElement);
+
+            var meshes = [];
+
+            function createMesh() {
+                var material = new THREE.MeshBasicMaterial({
+                    color: 0x1d6e99,
+                    wireframe: true
+                });
+
+                var columns = Math.floor(geometries.length / 3);
+                var middleY = Math.floor(innerHeight / 2);
+
+                geometries.forEach(function(geometry, index) {
+                    var mesh = new THREE.Mesh(geometry, material);
+                    var row = Math.floor(index / columns);
+                    mesh.position.x = (index % columns) * 500 - 500;
+                    mesh.position.y = -row * 300 + middleY + 200;
+                    scene.add(mesh);
+                    meshes.push(mesh);
+                });
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                meshes.forEach(function(mesh) {
+                    mesh.rotation.x += .01;
+                    mesh.rotation.y += .02;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            createMesh();
+            animate();
+        </script>
+    </body>
+</html>

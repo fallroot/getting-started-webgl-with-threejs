@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Lambert vs Phong - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <style>
+            .caption {
+                padding-right: 10px;
+                right: 0;
+                text-align: right;
+            }
+            #lambert {
+                top: 0;
+            }
+            #phong {
+                bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="lambert" class="caption">Lambert</p>
+        <p id="phong" class="caption">Phong</p>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, lambertScene, phongScene, camera;
+
+            var meshes = [];
+
+            var width      = innerWidth,
+                height     = innerHeight,
+                halfWidth  = width / 2,
+                halfHeight = height / 2;
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(innerWidth, innerHeight);
+                renderer.autoClear = false;
+                document.body.appendChild(renderer.domElement);
+
+                camera = new THREE.PerspectiveCamera(50, width / halfHeight, 1, 10000);
+                camera.position.z = 500;
+
+                lambertScene = new THREE.Scene();
+                phongScene   = new THREE.Scene();
+            }
+
+            function createMesh() {
+                var geometries = [];
+                geometries.push(new THREE.CubeGeometry(150, 150, 150, 30, 30));
+                geometries.push(new THREE.SphereGeometry(100, 30, 30));
+                geometries.push(new THREE.CylinderGeometry(0, 100, 200, 30, 30));
+
+                var lambertMaterial = new THREE.MeshLambertMaterial({
+                    color: 0xf15023
+                });
+
+                var phongMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xf15023,
+                    specular: 0xcccccc,
+                    shininess: 50
+                });
+
+                geometries.forEach(function(geometry, index) {
+                    var x = 300 * index - 300;
+
+                    var lambertMesh = new THREE.Mesh(geometry, lambertMaterial);
+                    lambertMesh.position.x = x;
+                    lambertScene.add(lambertMesh);
+                    meshes.push(lambertMesh);
+
+                    var phongMesh = new THREE.Mesh(geometry, phongMaterial);
+                    phongMesh.position.x = x;
+                    phongScene.add(phongMesh);
+                    meshes.push(phongMesh);
+                });
+            }
+
+            function createLight() {
+                var light = new THREE.SpotLight();
+                light.position.set(1000, 1000, 2000);
+
+                var light2 = new THREE.SpotLight();
+                light2.position.set(1000, 1000, 2000);
+
+                lambertScene.add(light);
+                phongScene.add(light2);
+            }
+
+            function draw() {
+                requestAnimationFrame(draw);
+
+                meshes.forEach(function(mesh) {
+                    mesh.rotation.x += .02;
+                    mesh.rotation.y += .03;
+                });
+
+                renderer.setViewport(0, halfHeight, width, halfHeight);
+                renderer.render(lambertScene, camera);
+
+                renderer.setViewport(0, 0, width, halfHeight);
+                renderer.render(phongScene, camera);
+            }
+
+            init();
+            createMesh();
+            createLight();
+            draw();
+        </script>
+    </body>
+</html>

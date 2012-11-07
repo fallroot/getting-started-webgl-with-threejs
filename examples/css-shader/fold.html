@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Textures</title>
+        <style>
+            img {
+                -webkit-filter: custom(
+                                    url(fold.vs) mix(url(fold.fs) multiply source-atop),
+                                    40 8 border-box,
+                                    transform perspective(1000) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg),
+                                    t 0,
+                                    shadow 2,
+                                    mapDepth 0,
+                                    mapCurve 0,
+                                    minSpacing 0,
+                                    useColoredBack 1,
+                                    backColor 0.5 0.5 0.5 1
+                                );
+                -webkit-transition: -webkit-filter ease-in-out 1s;
+/*
+                -webkit-filter: custom(url(varyings.vs) mix(url(varyings.fs) multiply source-atop),
+                                1 50 filter-box,
+                                transform perspective(500) rotateY(15deg) rotateX(45deg) rotateZ(-20deg) scale(0.5));
+*/
+            }
+            img:hover {
+                -webkit-filter: custom(
+                                    url(fold.vs) mix(url(fold.fs) multiply source-atop),
+                                    40 8 border-box,
+                                    transform perspective(1000) scale(1) rotateX(0deg) rotateY(-30deg) rotateZ(0deg),
+                                    t 1,
+                                    shadow 1.5,
+                                    mapDepth 40,
+                                    mapCurve -0.3,
+                                    minSpacing 0.3,
+                                    useColoredBack 1,
+                                    backColor 0.5 0.5 0.5 1
+                                );
+            }
+        </style>
+    </head>
+    <body>
+        <img src="../../img/figures/orthographic-example.jpg">
+    </body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Materials - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <style>
+            .caption {
+                top: 350px;
+                width: 150px;
+            }
+            #mesh-basic {
+                left: 65px;
+            }
+            #mesh-normal {
+                left: 240px;
+            }
+            #mesh-lambert {
+                left: 410px;
+            }
+            #mesh-phong {
+                left: 590px;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="mesh-basic" class="caption">MeshBasic</p>
+        <p id="mesh-normal" class="caption">MeshNormal</p>
+        <p id="mesh-lambert" class="caption">MeshLambert</p>
+        <p id="mesh-phong" class="caption">MeshPhong</p>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(innerWidth, innerHeight);
+
+            document.body.appendChild(renderer.domElement);
+
+            var scene = new THREE.Scene();
+
+            var camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 1, 10000);
+            camera.position.z = 1000;
+
+            var light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(0, 500, 500);
+
+            scene.add(light);
+
+            var basic = new THREE.MeshBasicMaterial({
+                color: 0xf15023
+            });
+
+            var normal = new THREE.MeshNormalMaterial({
+                color: 0xf15023
+            });
+
+            var lambert = new THREE.MeshLambertMaterial({
+                color: 0xf15023
+            });
+
+            var phong = new THREE.MeshPhongMaterial({
+                color: 0xf15023
+            });
+
+            var materials = [];
+
+            materials.push(basic);
+            materials.push(normal);
+            materials.push(lambert);
+            materials.push(phong);
+
+            var meshes = [];
+
+            materials.forEach(function(material, index) {
+                var geometry = new THREE.CubeGeometry(150, 150, 150);
+                var mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = index * 320 - 480;
+
+                scene.add(mesh);
+                meshes.push(mesh);
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                meshes.forEach(function(mesh) {
+                    mesh.rotation.x += .01;
+                    mesh.rotation.y += .02;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Field of View - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <style>
+            .caption {
+                left: 325px;
+            }
+            #camera-in {
+                top: 180px;
+            }
+            #camera-out {
+                top: 420px;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="camera-in" class="caption">fov = 30</p>
+        <p id="camera-out" class="caption">fov = 60</p>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, scene, outCamera, inCamera;
+
+            var width      = innerWidth,
+                height     = innerHeight,
+                halfWidth  = width / 2,
+                halfHeight = height / 2;
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(innerWidth, innerHeight);
+                renderer.autoClear = false;
+                document.body.appendChild(renderer.domElement);
+
+                outCamera = new THREE.PerspectiveCamera(30, width / halfHeight, 1, 10000);
+                outCamera.position.set(0, 500, 1000);
+
+                inCamera = new THREE.PerspectiveCamera(60, width / halfHeight, 1, 10000);
+                inCamera.position.set(0, 500, 1000);
+
+                scene = new THREE.Scene();
+
+                outCamera.lookAt(scene.position);
+                inCamera.lookAt(scene.position);
+            }
+
+            function createMesh() {
+                var geometry = new THREE.CubeGeometry(100, 100, 100);
+
+                var material = new THREE.MeshBasicMaterial({
+                    color: 0xff8800,
+                    wireframe: true
+                });
+
+                var material = new THREE.MeshNormalMaterial();
+
+                for (var i = 0; i < 15; ++i) {
+                    var mesh = new THREE.Mesh(geometry, material);
+                    mesh.position.x = i * 200 - 1400;
+                    scene.add(mesh);
+                }
+            }
+
+            function draw() {
+                renderer.setViewport(0, halfHeight, width, halfHeight);
+                renderer.render(scene, outCamera);
+
+                renderer.setViewport(0, 0, width, halfHeight);
+                renderer.render(scene, inCamera);
+            }
+
+            init();
+            createMesh();
+            draw();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Cameras - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <style>
+            .caption {
+                padding-right: 10px;
+                right: 0;
+                text-align: right;
+            }
+            #perspective {
+                top: 0;
+            }
+            #orthographic {
+                bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="perspective" class="caption">Perspective</p>
+        <p id="orthographic" class="caption">Orthographic</p>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, scene, pCamera, oCamera;
+
+            var width      = innerWidth,
+                height     = innerHeight,
+                halfWidth  = width / 2,
+                halfHeight = height / 2;
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(innerWidth, innerHeight);
+                renderer.autoClear = false;
+                document.body.appendChild(renderer.domElement);
+
+                pCamera = new THREE.PerspectiveCamera(60, width / halfHeight, 1, 10000);
+                pCamera.position.y = 50;
+
+                oCamera = new THREE.OrthographicCamera(-halfWidth, halfWidth, halfHeight / 2, -halfHeight / 2, 1, 10000);
+                oCamera.position.y = 50;
+
+                scene = new THREE.Scene();
+            }
+
+            function createMesh() {
+                var geometry = new THREE.CubeGeometry(50, 50, 50);
+
+                var material = new THREE.MeshBasicMaterial({
+                    color: 0xff8800,
+                    wireframe: true
+                });
+
+                var material = new THREE.MeshNormalMaterial();
+
+                for (var i = 0; i < 5; ++i) {
+                    var mesh = new THREE.Mesh(geometry, material);
+                    mesh.position.z = i * 100 - 200;
+                    scene.add(mesh);
+                }
+            }
+
+            function draw() {
+                requestAnimationFrame(draw);
+
+                var timer = Date.now() * 0.001;
+
+                var posX = Math.floor(Math.cos(timer) * 300);
+                var posZ = Math.floor(Math.sin(timer) * 300);
+
+                pCamera.position.x = posX;
+                pCamera.position.z = posZ;
+
+                oCamera.position.x = posX;
+                oCamera.position.z = posZ;
+
+                pCamera.lookAt(scene.position);
+                oCamera.lookAt(scene.position);
+
+                // renderer.setViewport(0, 0, halfWidth, height);
+                renderer.setViewport(0, halfHeight, width, halfHeight);
+                renderer.render(scene, pCamera);
+
+                // oCamera.position.set(300, 200, 1500);
+                // renderer.setViewport(halfWidth, 0, halfWidth, height);
+                renderer.setViewport(0, 0, width, halfHeight);
+                renderer.render(scene, oCamera);
+            }
+
+            init();
+            createMesh();
+            draw();
+        </script>
+    </body>
+</html>

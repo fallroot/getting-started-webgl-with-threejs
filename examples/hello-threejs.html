@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello, Three.js!</title>
+        <link rel="stylesheet" href="css/reset.css">
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, scene, camera, mesh;
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(innerWidth, innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 1, 10000);
+                camera.position.z = 1000;
+            }
+
+            function createMesh() {
+                var geometry = new THREE.SphereGeometry(200);
+                var material = new THREE.MeshBasicMaterial({
+                    color: 0x1d6e99,
+                    wireframe: true
+                });
+
+                mesh = new THREE.Mesh(geometry, material);
+                scene.add(mesh);
+            }
+
+            function draw() {
+                requestAnimationFrame(draw);
+
+                mesh.rotation.x += .01;
+                mesh.rotation.y += .02;
+
+                renderer.render(scene, camera);
+            }
+
+            init();
+            createMesh();
+            draw();
+        </script>
+    </body>
+</html>

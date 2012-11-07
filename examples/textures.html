@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Textures - Three.js</title>
+        <link rel="stylesheet" href="css/reset.css">
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script>
+            var renderer, scene, camera;
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(innerWidth, innerHeight);
+                renderer.setClearColorHex(0x000000, 1);
+                document.body.appendChild(renderer.domElement);
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 1, 10000);
+                camera.position.z = 1000;
+            }
+
+            function createMesh() {
+                var textures = [
+                    'wc-1974-telstar.jpg',
+                    'eu-1992-etrusco-unico.jpg',
+                    'wc-2002-fevernova.jpg',
+                    'eu-2004-roteiro.jpg',
+                    'wc-2006-teamgeist.jpg',
+                    'eu-2008-europass.jpg',
+                    'wc-2010-jabulani.jpg',
+                    'eu-2012-tango12.jpg'
+                ];
+
+                var geometry = new THREE.SphereGeometry(125, 50, 50);
+
+                for (var i = 0, length = textures.length; i < length; ++i) {
+                    var texture = THREE.ImageUtils.loadTexture('img/textures/' + textures[i]);
+
+                    var material = new THREE.MeshPhongMaterial({
+                        map: texture
+                    });
+
+                    var mesh = new THREE.Mesh(geometry, material);
+
+                    mesh.position.x = Math.floor(i % 4) * 300 - 450;
+                    mesh.position.y = Math.floor(i / 4) * -400 + 200;
+
+                    scene.add(mesh);
+                }
+            }
+
+            function createLight() {
+                var ambient = new THREE.AmbientLight(0x333333);
+                var directional = new THREE.DirectionalLight();
+
+                directional.position.set(1, 1, 1);
+
+                scene.add(ambient);
+                scene.add(directional);
+            }
+
+            function draw() {
+                requestAnimationFrame(draw);
+
+                scene.children.forEach(function(object) {
+                    object.rotation.x += .01;
+                    object.rotation.y += .02;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            init();
+            createMesh();
+            createLight();
+            draw();
+        </script>
+    </body>
+</html>

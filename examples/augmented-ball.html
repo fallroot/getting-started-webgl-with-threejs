@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Augmented Ball - tQuery</title>
+    </head>
+    <body>
+        <script src="js/augmentedgesture-bundle.js"></script>
+        <script src="js/tquery-bundle.min.js"></script>
+        <script>
+            var aGesture = new AugmentedGesture().start().domElementThumbnail();
+
+            var world = tQuery.createWorld().boilerplate().start();
+            world.removeCameraControls();
+
+            var ball3d = tQuery.createSphere().addTo(world).scaleBy(.5);
+
+            var pointerOpts = new AugmentedGesture.OptionPointer();
+            aGesture.addPointer('ball', pointerOpts);
+
+            pointerOpts.pointer.crossColor = {r: 221, g: 246, b: 13};
+
+            pointerOpts.colorFilter.r = {min: 64, max: 255};
+            pointerOpts.colorFilter.g = {min: 0, max: 30};
+            pointerOpts.colorFilter.b = {min: 0, max: 30};
+
+            aGesture.bind('mousemove.ball', function(event) {
+                ball3d.get(0).position.x = event.x * 2 - 1;
+                ball3d.get(0).position.y = -event.y * 2 + 1;
+            });
+
+            world.loop().hook(function(delta, now) {
+                var angle = .5 * now * Math.PI * 2;
+                ball3d.get(0).rotation.x = angle;
+                ball3d.get(0).rotation.y = angle;
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1063 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Three.js로 시작하는 WebGL - H3 2012</title>
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+        <link rel="stylesheet" href="reveal.js/lib/css/tomorrow-night-blue.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Inconsolata">
+        <link rel="stylesheet" href="css/h3-2012.css" id="theme">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section class="intro">
+                    <h1><b>Three.js</b>로 시작하는<br><b>WebGL</b></h1>
+                    <h2>Web 플랫폼 Lab | 문추근</h2>
+                </section>
+
+                <section data-background="full" data-background-image="presentation-target" data-overlay="right" data-fragment>
+                    <h1>오늘의 목표</h1>
+                    <ul>
+                        <li>Three.js, tQuery 사용법</li>
+                        <li>3차원 그래픽 프로그래밍 기초 학습</li>
+                        <li>WebGL에 대한 흥미와 관심 유발</li>
+                        <li>장난감부터 서비스를 목표로</li>
+                    </ul>
+                </section>
+
+                <section data-background="full" data-background-image="presentation-toc" data-overlay="right">
+                    <h1>발표 순서</h1>
+                    <ul>
+                        <li>WebGL</li>
+                        <li><em>Three.js</em></li>
+                        <li>tQuery</li>
+                        <li>WebGL 활용</li>
+                    </ul>
+                </section>
+
+                <section id="webgl-definition" data-fragment>
+                    <h1>WebGL</h1>
+                    <ul>
+                        <li><em>웹 브라우저</em>에서 제공하는 <em>3차원 그래픽 자바스크립트 API</em></li>
+                        <li>플래시, 실버라이트, 유니티 등의 <em>플러그인</em>이 필요 없음</li>
+                        <li><em>GPU 가속</em>을 사용한 높은 성능의 그래픽 구현</li>
+                        <li><em>OpenGL ES</em> 2.0 기반</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>WebGL 브라우저 지원</h1>
+                    <table class="browser-support">
+                        <tr class="desktop">
+                            <th>데스크탑</th>
+                            <td class="ie not-yet"></td>
+                            <td class="chrome">8+</td>
+                            <td class="firefox">4+</td>
+                            <td class="safari">5.1+</td>
+                        </tr>
+                        <tr class="mobile">
+                            <th>모바일</th>
+                            <td class="safari not-yet"></td>
+                            <td class="android not-yet"></td>
+                            <td class="chrome not-yet"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section data-fullscreen>
+                    <img src="/img/figures/opengl-family.jpg">
+                </section>
+
+                <section data-fullscreen style="background: #000;">
+                    <iframe data-src="examples/webgl-water/webgl-water.html" style="background: #000;"></iframe>
+                </section>
+
+                <section data-markdown data-font-size="xx-small">
+                    <script type="text/template">
+                        # Hello, WebGL
+
+                            &lt;canvas id="webgl-canvas" width="800" height="500"&gt;&lt;/canvas&gt;
+                            &lt;script id="vertex-source" type="x-shader/x-vertex"&gt;
+                              attribute vec2 pos;
+                              void main() {
+                                gl_Position = vec4(pos, 0, 1);
+                              }
+                            &lt;/script&gt;
+                            &lt;script id="fragment-source" type="x-shader/x-fragment"&gt;
+                              void main() {
+                                gl_FragColor = vec4(.95, .31, .14, 1);
+                              }
+                            &lt;/script&gt;
+                            &lt;script&gt;
+                            var canvas, gl, program;
+
+                            function initWebGL() {
+                              canvas  = document.getElementById('webgl-canvas');
+                              gl      = canvas.getContext('experimental-webgl');
+                              program = gl.createProgram();
+                            }
+
+                            function initBuffer() {
+                              var vertexPosBuffer = gl.createBuffer();
+                              gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
+
+                              var vertices = [-.5, -.5, .5, -.5, 0, .5];
+                              gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+                            }
+
+                            function createShader(source, type) {
+                              var shader = gl.createShader(type);
+                              gl.shaderSource(shader, source);
+                              gl.compileShader(shader);
+                              return shader;
+                            }
+
+                            function attachShader() {
+                              var vs = document.getElementById('vertex-source').innerHTML;
+                              var fs = document.getElementById('fragment-source').innerHTML;
+
+                              var vshader = createShader(vs, gl.VERTEX_SHADER);
+                              var fshader = createShader(fs, gl.FRAGMENT_SHADER);
+
+                              gl.attachShader(program, vshader);
+                              gl.attachShader(program, fshader);
+                            }
+
+                            function draw() {
+                              gl.linkProgram(program);
+                              gl.useProgram(program);
+
+                              program.vertexPosAttrib = gl.getAttribLocation(program, 'pos');
+                              gl.enableVertexAttribArray(program.vertexPosAttrib);
+                              gl.vertexAttribPointer(program.vertexPosAttrib, 2, gl.FLOAT, false, 0, 0);
+
+                              gl.drawArrays(gl.TRIANGLES, 0, 3);
+                            }
+
+                            initWebGL();
+                            initBuffer();
+                            attachShader();
+                            draw();
+                        </script>
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Hello, WebGL</h1>
+                    <iframe data-src="examples/hello-webgl.html"></iframe>
+                </section>
+
+                <section data-markdown data-fullscreen>
+                    <script type="text/template">
+                        ![좌절](img/figures/frustration.jpg)
+                    </script>
+                </section>
+
+                <section data-fullscreen>
+                    <iframe data-src="examples/adios-webgl.html" data-fullscreen></iframe>
+                </section>
+
+                <section>
+                    <h1>H3 2011</h1>
+                    <iframe data-src="examples/h3-lottery.html"></iframe>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # Three.js
+
+                        - 3차원 그래픽 *왕초보*를 위한 경량 자바스크립트 라이브러리
+                        - <https://github.com/mrdoob/three.js/>
+                        - 2010\. 4 ~ 2012\. 10 (r52)
+                        - 370 KB (minified)
+                    </script>
+                </section>
+
+                <section data-markdown data-font-size="small">
+                    <script type="text/template">
+                        # Hello, Three.js
+
+                            var renderer, scene, camera, mesh;
+
+                            function init() {
+                              renderer = new THREE.WebGLRenderer();
+                              renderer.setSize(innerWidth, innerHeight);
+                              document.body.appendChild(renderer.domElement);
+
+                              scene = new THREE.Scene();
+
+                              var aspect = innerWidth / innerHeight;
+                              camera = new THREE.PerspectiveCamera(50, aspect, 1, 10000);
+                              camera.position.z = 1000;
+                            }
+
+                            function createMesh() {
+                              var geometry = new THREE.SphereGeometry(100);
+                              var material = new THREE.MeshBasicMaterial({
+                                color: 0x1d6e99,
+                                wireframe: true
+                              });
+                              mesh = new THREE.Mesh(geometry, material);
+                              scene.add(mesh);
+                            }
+
+                            function draw() {
+                              requestAnimationFrame(draw);
+
+                              mesh.rotation.x += .01;
+                              mesh.rotation.y += .02;
+
+                              renderer.render(scene, camera);
+                            }
+
+                            init();
+                            createMesh();
+                            draw();
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Hello, Three.js</h1>
+                    <iframe data-src="examples/hello-threejs.html"></iframe>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # WebGL 좌표계
+
+                        ![WebGL 좌표계](img/figures/webgl-coordinate.jpg)
+                    </script>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-renderer" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Renderer</h1>
+                    <ul>
+                        <li>최종 결과물을 그려주는 객체</li>
+                    </ul>
+                    <ul>
+                        <li class="visible"><em>WebGLRenderer</em></li>
+                        <li class="visible">CanvasRenderer</li>
+                        <li class="visible">SVGRenderer</li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # Renderer
+
+                            renderer = new THREE.WebGLRenderer();
+                            renderer.setSize(innerWidth, innerHeight);
+                            document.body.appendChild(renderer.domElement);
+                    </script>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-scene" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Scene</h1>
+                    <ul>
+                        <li>화면을 구성하는 기본 요소</li>
+                        <li>여러 개의 모델과 조명으로 구성</li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # Scene
+
+                            scene = new THREE.Scene();
+
+                            scene.add(object);
+                            scene.add(mesh);
+                            scene.add(light);
+                    </script>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-camera" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Camera</h1>
+                    <ul>
+                        <li class="visible"><em>PerspectiveCamera</em></li>
+                        <li class="visible"><em>OrthographicCamera</em></li>
+                        <li class="visible">CubeCamera</li>
+                        <li class="visible">CombinedCamera</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>Camera</h1>
+                    <pre><code style="font-size: 24px;">var aspect = innerWidth / innerHeight;
+camera = new THREE.PerspectiveCamera(50, aspect, 1, 10000);
+camera.position.z = 1000;</code></pre>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # PerspectiveCamera
+
+                        - 투시투영, 원근투영(Perspective Projection)
+                        - <em>원근법</em>에 따라 가까운 물체가 더 크게 보임
+
+                        `PerspectiveCamera(fov, aspect, near, far)`
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 투시투영
+
+                        ![Perspective Projecton](img/figures/perspective-projection.jpg)
+                   </script>
+                </section>
+
+                <section>
+                    <h1>시야각</h1>
+                    <iframe data-src="examples/fov.html"></iframe>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 투시투영
+
+                        ![Perspective Projecton Example](img/figures/perspective-example.jpg)
+                   </script>
+                </section>
+
+                <section data-markdown data-fragment data-font-size="medium">
+                    <script type="text/template">
+                        # OrthographicCamera
+
+                        - 직교투영(Orthographic Projection)
+                        - 바라보는 방향은 있지만 지점은 없음
+                        - 같은 크기의 물체는 거리에 상관없이 <em>같은 크기</em>로 보임
+
+                        `OrthographicCamera(left, right, top, bottom, near, far)`
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 직교투영
+
+                        ![OrthographicCamera](img/figures/orthographic-projection.jpg)
+                   </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 직교투영
+
+                        ![Orthographic Projecton Example](img/figures/orthographic-example.jpg)
+                   </script>
+                </section>
+
+                <section>
+                    <h1 style="font-size: 64px;">Perspective vs Orthographic</h1>
+                    <iframe data-src="examples/cameras.html"></iframe>
+                </section>
+
+                <section data-background="full" data-background-image="mesh" data-overlay="right" data-fragment>
+                    <h1>Mesh</h1>
+                    <ul>
+                        <li>그물망</li>
+                        <li>와이어프레임</li>
+                        <li><em>도형</em>과 <em>질감</em>을 적용한 물체</li>
+                        <li>Mesh = <em>Geometry</em> + <em>Material</em></li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="medium">
+                    <script type="text/template">
+                        # Mesh
+
+                            var geometry = new THREE.SphereGeometry(100);
+
+                            var material = new THREE.MeshBasicMaterial({
+                                color: 0xf15023,
+                                wireframe: true
+                            });
+
+                            mesh = new THREE.Mesh(geometry, material);
+
+                            scene.add(mesh);
+                    </script>
+                </section>
+
+                <section data-dual-column>
+                    <h1>Geometry<sub>도형</sub></h1>
+                    <ul style="font-size: 28px;">
+                        <li>CircleGeometry</li>
+                        <li>ConvexGeometry</li>
+                        <li>CubeGeometry</li>
+                        <li>CylinderGeometry</li>
+                        <li>ExtrudeGeometry</li>
+                        <li>IcosahedronGeometry</li>
+                        <li>LatheGeometry</li>
+                        <li>OctahedronGeometry</li>
+                        <li>ParametricGeometry</li>
+                        <li>PlaneGeometry</li>
+                        <li>PolyhedronGeometry</li>
+                        <li>SphereGeometry</li>
+                        <li>TetrahedronGeometry</li>
+                        <li>TextGeometry</li>
+                        <li>TorusGeometry</li>
+                        <li>TorusKnotGeometry</li>
+                        <li>TubeGeometry</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>Geometries</h1>
+                    <iframe data-src="examples/geometries.html"></iframe>
+                </section>
+
+                <section data-markdown data-dual-column>
+                    <script type="text/template">
+                        # Material<sub>재질</sub>
+
+                        - *MeshBasicMaterial*
+                        - *MeshNormalMaterial*
+                        - *MeshLambertMaterial*
+                        - *MeshPhongMaterial*
+                        - LineBasicMaterial
+                        - MeshDepthMaterial
+                        - MeshFaceMaterial
+                        - ParticleBasicMaterial
+                        - ParticleCanvasMaterial
+                        - ParticleDOMMaterial
+                        - ShaderMaterial
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Materials</h1>
+                    <iframe data-src="examples/materials.html"></iframe>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-animation" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Animation</h1>
+                    <ul>
+                        <li>개체의 크기, 위치, 회전 변경</li>
+                        <li><em>RequestAnimation</em></li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # setInterval
+
+                            function draw() {
+                              drawSomething();
+                            }
+                            setInterval(draw, 100);
+                    </script>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # setTimeout
+
+                            function draw() {
+                              drawSomething();
+                              setTimeout(draw, 100);
+                            }
+                            draw();
+                    </script>
+                </section>
+
+                <section data-fragment>
+                    <h1>setInterval의 문제점</h1>
+                    <ul>
+                        <li>정확하지 않다.</li>
+                        <li>효율적이지 않다.</li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # UI 쓰레드 큐
+
+                        - 실행하는 시간이 아니라 <em>큐에 넣는 시간</em>
+                        - UI 업데이트 + 자바스크립트 실행
+                        - UI 애니메이션 + 키보드, 마우스 이벤트
+                        - 큐에 쌓여 있는 작업이 끝나야 실행
+                        - 정확한 실행 시간을 보장할 수 없음
+                    </script>
+                </section>
+
+                <section data-fullscreen>
+                    <img src="img/figures/waiting-line.jpg">
+                </section>
+
+                <section data-fullscreen>
+                    <img src="img/figures/waiting-number.jpg">
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # setInterval의 비효율
+
+                        - 비활성 탭, 최소화 창에서도 실행
+                        - CPU, Memory, GPU 사용
+                        - 전원 낭비
+                    </script>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # RequestAnimationFrame
+
+                        - 기본적으로 60Hz
+                        - UI 쓰레드 큐 부하 인식
+                        - 필요하면 프레임 생략
+                    </script>
+                </section>
+
+                <section>
+                    <h1>RAF 브라우저 지원</h1>
+                    <table class="browser-support">
+                        <tr class="desktop">
+                            <th>데스크탑</th>
+                            <td class="ie">10+</td>
+                            <td class="chrome">4+</td>
+                            <td class="firefox">10+</td>
+                            <td class="safari">6+</td>
+                        </tr>
+                        <tr class="mobile">
+                            <th>모바일</th>
+                            <td class="safari">6+</td>
+                            <td class="android not-yet"></td>
+                            <td class="chrome">18+</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # RequestAnimationFrame
+
+                            function draw() {
+                              requestAnimationFrame(draw);
+
+                              mesh.rotation.x += .01;
+                              mesh.rotation.y += .02;
+
+                              renderer.render(scene, camera);
+                            }
+                            draw();
+                    </script>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-light" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Light</h1>
+                    <ul>
+                        <li>명암으로 사물의 입체감을 더함</li>
+                    </ul>
+                    <ul>
+                        <li class="visible"><em>AmbientLight</em></li>
+                        <li class="visible"><em>DirectionalLight</em></li>
+                        <li class="visible"><em>PointLight</em></li>
+                        <li class="visible"><em>SpotLight</em></li>
+                        <li class="visible">HemisphereLight</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>Lambert vs Phong</h1>
+                    <iframe data-src="examples/lambert-vs-phong.html"></iframe>
+                </section>
+
+                <section>
+                    <h1>DirectionalLight<sub>방향광</sub></h1>
+                    <img src="img/figures/directional-light.png">
+                </section>
+
+                <section>
+                    <h1>PointLight<sub>점광</sub></h1>
+                    <img src="img/figures/point-light.png">
+                </section>
+
+                <section>
+                    <h1>SpotLight<sub>집중광</sub></h1>
+                    <img src="img/figures/spot-light.png">
+                </section>
+
+                <section>
+                    <h1>AmbientLight<sub>주변광</sub></h1>
+                    <img src="img/figures/ambient-light.png">
+                </section>
+
+                <section data-markdown data-font-size="medium">
+                    <script type="text/template">
+                        # Light
+
+                            AmbientLight(hex)
+
+                            DirectionalLight(hex, intensity, distance)
+
+                            PointLight(color, intensity, distance)
+
+                            SpotLight(color, intensity, distance, castShadow)
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Lights</h1>
+                    <iframe data-src="examples/lights.html"></iframe>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-shadow" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Shadow</h1>
+                    <ul>
+                        <li>조명의 방향과 세기를 반영</li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # Shadow
+
+                            renderer.shadowMapEnabled = true;
+
+                            light.castShadow = true;
+
+                            object.castShadow = true;
+                            object.receiveShadow = true;
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Shadow</h1>
+                    <iframe data-src="examples/shadow.html"></iframe>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-texture" data-overlay="right" data-fragment>
+                    <h1 class="fragment visible">Texture</h1>
+                    <ul>
+                        <li>물체의 표면을 이미지 파일로 처리</li>
+                    </ul>
+                </section>
+
+                <section data-markdown data-font-size="medium">
+                    <script type="text/template">
+                        # Texture
+
+                            var texture = THREE.ImageUtils.loadTexture('any.jpg');
+
+                            new THREE.MeshBasicMaterial({
+                                map: texture
+                            });
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Textures</h1>
+                    <iframe data-src="examples/textures.html"></iframe>
+                </section>
+
+                <section data-background="full" data-background-image="threejs-model" data-overlay="right" data-fragment>
+                    <h1>Model</h1>
+                    <ul>
+                        <li>다른 앱에서 만든 3차원 모델 사용</li>
+                    </ul>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Model Exporters
+
+                        ## Blender, 3D Max, WaveFront
+
+                        - blender
+                        - ctm
+                        - fbx
+                        - max
+                        - obj
+                        - utf8
+                    </script>
+                </section>
+
+                <section data-markdown data-dual-column>
+                    <script type="text/template">
+                        # Model Loaders
+
+                        - *ColladaLoader*
+                        - *OBJLoader*
+                        - CTMLoader
+                        - MTLLoader
+                        - OBJMTLLoader
+                        - STLLoader
+                        - UTF8Loader
+                        - VTKLoader
+                    </script>
+                </section>
+
+                <section data-markdown data-font-size="large">
+                    <script type="text/template">
+                        # ColladaLoader 사용법
+
+                            var loader = new THREE.ColladaLoader();
+
+                            loader.load('model.dae', function(collada) {
+                              var object = collada.scene;
+                              scene.add(object);
+                              doSomething();
+                            });
+                    </script>
+                </section>
+
+                <section data-markdown data-font-size="medium">
+                    <script type="text/template">
+                        # OBJLoader 사용법
+
+                            var loader = new THREE.OBJLoader();
+
+                            loader.addEventListener('load', function(event) {
+                              var object = event.content;
+                              scene.add(object);
+                            });
+
+                            loader.load('model.obj');
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Model Loader</h1>
+                    <iframe data-src="examples/collada.html"></iframe>
+                </section>
+
+                <section class="title">
+                    <h1>tQuery</h1>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # tQuery
+
+                        - <em>Three.js</em> + <em>jQuery</em>
+                        - Three.js 플러그인 프레임워크
+                        - 함수 체이닝, 아이디/클래스 선택자, 이벤트 처리
+                        - <http://jeromeetienne.github.com/tquery/>
+                    </script>
+                </section>
+
+                <section>
+                    <h1>Hello, tQuery</h1>
+                    <pre><code style="font-size: 26px;">var world  = tQuery.createWorld().boilerplate().start();
+var object = tQuery.createTorus().addTo(world);</code></pre>
+                </section>
+
+                <section>
+                    <h1>Hello, tQuery</h1>
+                    <iframe data-src="examples/hello-tquery.html"></iframe>
+                </section>
+
+                <section>
+                    <h1>Web Audio API</h1>
+                    <iframe data-src="examples/tquery-histogram.html"></iframe>
+                </section>
+
+                <section>
+                    <h1>증강 현실</h1>
+                    <iframe data-src="examples/augmented-ball.html"></iframe>
+                </section>
+
+                <section class="title">
+                    <h1>WebGL의 활용</h1>
+                </section>
+
+                <section>
+                    <h1>다른 WebGL 프레임워크</h1>
+                    <ul>
+                        <li>GLGE<sub><a href="http://www.glge.org">http://www.glge.org</a></sub></li>
+                        <li>OSG.JS<sub><a href="http://osgjs.org/">http://osgjs.org/</a></sub></li>
+                        <li>PhiloGL<sub><a href="http://www.senchalabs.org/philogl/">http://www.senchalabs.org/philogl/</a></sub></li>
+                        <li>SceneJS<sub><a href="http://scenejs.org/">http://scenejs.org/</a></sub></li>
+                    </ul>
+                    </script>
+                </section>
+
+                <section data-markdown data-fragment>
+                    <script type="text/template">
+                        # 주변 상황
+
+                        - 3D는 대세<sub>CSS 셰이더</sub>
+                        - 하드웨어와 네트워크의 발전<sub>모델링 데이터 처리</sub>
+                        - 스크립트 언어의 발전<sub>Dart, TypeScript</sub>
+                        - 3D 하드웨어의 발전<sub>3D 스캐너, 3D 프린터</sub>
+                    </script>
+                </section>
+
+                <section>
+                    <h1>게임</h1>
+                    <figure>
+                        <img src="img/figures/trigger-rally.jpg" alt="">
+                        <figcaption>
+                            <p>Trigger Rally</p>
+                            <p>
+                                <a href="http://triggerrally.com/">http://triggerrally.com/</a>
+                            </p>
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section>
+                    <h1>데이터 시각화</h1>
+                    <iframe data-src="examples/webgl-globe/index.html"></iframe>
+                </section>
+
+                <section>
+                    <h1>모델 뷰어</h1>
+                    <figure>
+                        <img src="img/figures/eve-online.jpg" alt="">
+                        <figcaption>
+                            <p>Eve Online</p>
+                            <p>
+                                <a href="http://www.eveonline.com/universe/spaceships/">http://www.eveonline.com/universe/spaceships/</a>
+                            </p>
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section>
+                    <h1>모델 뷰어</h1>
+                    <figure>
+                        <img src="img/figures/zygote-body.jpg" alt="">
+                        <figcaption>
+                            <p>Zygote Body</p>
+                            <p><a href="http://www.zygotebody.com/">http://www.zygotebody.com/</a></p>
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section>
+                    <h1>모델 편집</h1>
+                    <figure>
+                        <img src="img/figures/my-robot-nation.jpg" alt="">
+                        <figcaption>
+                            <p>My Robot Nation</p>
+                            <p><a href="http://www.myrobotnation.com/">http://www.myrobotnation.com/</a></p>
+                        </figcaption>
+                    </figure>
+                </section>
+
+<!--
+                 <section>
+                    <h1>My Robot Nation</h1>
+                    <video width="800" height="500">
+                        <source src="video/my-robot-nation.m4v" type="video/mp4">
+                    </video>
+                </section>
+ -->
+                <section data-background="full" data-background-image="presentation-target" data-overlay="right">
+                    <h1>오늘의 목표</h1>
+                    <ul>
+                        <li>Three.js, tQuery 사용법</li>
+                        <li>3차원 그래픽 프로그래밍 기초 학습</li>
+                        <li>WebGL에 대한 흥미와 관심 유발</li>
+                        <li>장난감부터 서비스를 목표로</li>
+                    </ul>
+                </section>
+
+                <section data-markdown id="references">
+                    <script type="text/template">
+                        # 참고 사이트
+
+                        - [OpenGL - Wikipedia](http://en.wikipedia.org/wiki/OpenGL)
+                        - [OpenGL ES - Wikipedia](http://en.wikipedia.org/wiki/OpenGL_ES)
+                        - [WebGL - Wikipedia](http://en.wikipedia.org/wiki/Webgl)
+                        - [three.js](http://mrdoob.github.com/three.js/)
+                        - [tQuery](http://jeromeetienne.github.com/tquery/)
+                        - [WebGL Water](http://madebyevan.com/webgl-water/)
+                        - [WebGL Globe](http://www.chromeexperiments.com/globe)
+                        - [Learning Three.js](http://learningthreejs.com/)
+                        - [Trigger Rally](http://triggerrally.com/)
+                        - [Spaceships - EVE Online](http://www.eveonline.com/universe/spaceships/)
+                        - [Zygote Body](http://www.zygotebody.com/)
+                        - [My Robot Nation](http://www.myrobotnation.com/)
+                        - [CSS shaders](https://dvcs.w3.org/hg/FXTF/raw-file/tip/custom/index.html)
+                    </script>
+                </section>
+
+                <section id="attributions">
+                    <h1>사진 출처</h1>
+                    <ul>
+                        <li><a href="http://www.flickr.com/photos/rrrodrigo/5391168318">http://www.flickr.com/photos/rrrodrigo/5391168318</a></li>
+                        <li><a href="http://www.flickr.com/photos/evaekeblad/4811693778">http://www.flickr.com/photos/evaekeblad/4811693778</a></li>
+                        <li><a href="http://www.flickr.com/photos/ensh/6244349067/">http://www.flickr.com/photos/ensh/6244349067/</a></li>
+                        <li><a href="http://www.flickr.com/photos/jason-samfield/5646978839">http://www.flickr.com/photos/jason-samfield/5646978839</a></li>
+                        <li><a href="http://www.flickr.com/photos/e-jays/5694620520/">http://www.flickr.com/photos/e-jays/5694620520/</a></li>
+                        <li><a href="http://www.flickr.com/photos/alancleaver/2279694390">http://www.flickr.com/photos/alancleaver/2279694390</a></li>
+                        <li><a href="http://www.flickr.com/photos/29233640@N07/3696268211">http://www.flickr.com/photos/29233640@N07/3696268211</a></li>
+                        <li><a href="http://www.flickr.com/photos/jspad/1022702429">http://www.flickr.com/photos/jspad/1022702429</a></li>
+                        <li><a href="http://www.flickr.com/photos/cmaj7/5616748317/">http://www.flickr.com/photos/cmaj7/5616748317/</a></li>
+                        <li><a href="http://www.flickr.com/photos/rawhead/4021124402">http://www.flickr.com/photos/rawhead/4021124402</a></li>
+                    </ul>
+                </section>
+
+                <section class="thankyou">
+                    <h1>감사합니다.</h1>
+                    <h2>
+                        Web 플랫폼 Lab PD / 문추근<br>
+                        fallroot@kthcorp.com<br>
+                        @fallroot
+                    </h2>
+                </section>
+
+            </div>
+        </div>
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.min.js"></script>
+        <script>
+            NodeList.prototype.forEach = Array.prototype.forEach;
+
+            (function() {
+                var slides = document.querySelectorAll('[data-background=full]');
+                slides.forEach(function(slide) {
+                    slide.style.backgroundImage = 'url(img/backgrounds/' + slide.dataset.backgroundImage + '.jpg)';
+                });
+            })();
+
+            (function() {
+                var slides = document.querySelectorAll('[data-overlay]');
+
+                slides.forEach(function(slide) {
+                    var overlay = document.createElement('div');
+
+                    if (slide.dataset.fragment !== undefined) {
+                        overlay.classList.add('fragment');
+                    }
+                    overlay.classList.add('overlay');
+                    overlay.classList.add(slide.dataset.overlay);
+
+                    overlay.innerHTML = slide.innerHTML;
+                    slide.innerHTML = '';
+
+                    slide.appendChild(overlay);
+                });
+            })();
+
+            function fireMessage(slide, message) {
+                var iframe = slide.querySelector('iframe');
+
+                if (!iframe) {
+                    return;
+                }
+
+                if (!iframe.src || iframe.src == 'about:blank') {
+                    iframe.src = iframe.dataset.src;
+                } else {
+                    iframe.src = 'about:blank';
+                }
+            }
+
+            var slides = document.querySelectorAll('.reveal .slides>section');
+
+            slides.forEach(function(slide) {
+                slide.addEventListener('webkitTransitionEnd', function(event) {
+                    var property = event.propertyName;
+                    var target = event.target;
+
+                    if (property == 'z-index' && target.classList.contains('present')) {
+                        fireMessage(target, 'play');
+                    }
+                });
+
+                slide.addEventListener('mozTransitionEnd', function(event) {
+                    var property = event.propertyName;
+                    var target = event.target;
+
+                    console.log(event)
+
+                    if (property == 'z-index' && target.classList.contains('present')) {
+                        fireMessage(target, 'play');
+                    }
+                });
+            });
+
+            Reveal.addEventListener('slidechanged', function(event) {
+                var previous = event.previousSlide;
+
+                if (previous) {
+                    fireMessage(previous, 'pause');
+                } else {
+                    fireMessage(event.currentSlide, 'play');
+                }
+            });
+
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                history: true,
+                mouseWheel: false,
+                rollingLinks: false,
+
+                theme: 'simple',
+                transition: 'linear',
+
+                dependencies: [
+                    {
+                        src: 'reveal.js/lib/js/highlight.js',
+                        async: true,
+                        callback: function() {
+                            window.hljs.initHighlightingOnLoad();
+                        }
+                    },
+                    {
+                        src: 'reveal.js/lib/js/classList.js',
+                        condition: function() {
+                            return !document.body.classList;
+                        }
+                    },
+                    {
+                        src: 'reveal.js/lib/js/showdown.js',
+                        condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }
+                    },
+                    {
+                        src: 'reveal.js/lib/js/data-markdown.js',
+                        condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        },
+                        callback: function() {
+                            document.querySelectorAll('[data-fragment] li').forEach(function(element) {
+                                element.classList.add('fragment');
+                            });
+
+                            document.querySelectorAll('[data-fragment] ul + *').forEach(function(element) {
+                                element.classList.add('fragment');
+                            });
+
+                            document.querySelectorAll('code').forEach(function(element) {
+                                element.classList.add('javascript');
+                            });
+                        }
+                    },
+                    {
+                        src: 'reveal.js/plugin/zoom-js/zoom.js',
+                        condition: function() {
+                            return !!document.body.classList;
+                        }
+                    },
+                    {
+                        src: 'reveal.js//socket.io/socket.io.js',
+                        async: true,
+                        condition: function() {
+                            return window.location.host === 'localhost:1947';
+                        }
+                    },
+                    {
+                        src: 'reveal.js/plugin/speakernotes/client.js',
+                        async: true,
+                        condition: function() {
+                            return window.location.host === 'localhost:1947';
+                        }
+                    }
+                ]
+            });
+        </script>
+    </body>
+</html>
