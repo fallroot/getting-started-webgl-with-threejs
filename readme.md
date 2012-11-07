@@ -39,7 +39,7 @@ CSS 셰이더를 사용한 예제 하나를 제외하고 정상적으로 동작�
 
 ## 발표 자료 보기
 
-<https://getting-started-webgl-with-threejs.github.com>
+<http://fallroot.github.com/getting-started-webgl-with-threejs/>
 
 [크롬 카나리]: https://tools.google.com/dlpage/chromesxs
 [구글 웹 폰트]: http://www.google.com/webfonts
