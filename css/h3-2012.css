@@ -81,7 +81,7 @@ body {
     text-decoration: underline;
 }
 .reveal .slides > section.intro {
-    background: url(/img/backgrounds/intro.jpg) no-repeat right bottom;
+    background: url(../img/backgrounds/intro.jpg) no-repeat right bottom;
     padding-left: 50px;
 }
 .reveal .slides > section.intro h1 {
@@ -105,7 +105,7 @@ body {
     text-align: left;
 }
 .reveal .slides > section.thankyou {
-    background: url(/img/backgrounds/thankyou.jpg) no-repeat center center;
+    background: url(../img/backgrounds/thankyou.jpg) no-repeat center center;
 }
 .reveal .slides > section.thankyou h1 {
     background: none;
@@ -217,7 +217,7 @@ body {
     margin: 0;
 }
 .reveal li {
-    background: url(/img/h3/square.png) no-repeat left center;
+    background: url(../img/h3/square.png) no-repeat left center;
     padding-left: 32px;
 }
 .reveal section[data-dual-column] ul {
@@ -273,22 +273,22 @@ body {
     width: 150px;
 }
 .reveal .browser-support .desktop .ie {
-    background-image: url(/img/logos/ie-128.png);
+    background-image: url(../img/logos/ie-128.png);
 }
 .reveal .browser-support .chrome {
-    background-image: url(/img/logos/chrome-128.png);
+    background-image: url(../img/logos/chrome-128.png);
 }
 .reveal .browser-support .firefox {
-    background-image: url(/img/logos/firefox-128.png);
+    background-image: url(../img/logos/firefox-128.png);
 }
 .reveal .browser-support .desktop .safari {
-    background-image: url(/img/logos/safari-128.png);
+    background-image: url(../img/logos/safari-128.png);
 }
 .reveal .browser-support .mobile .android {
-    background-image: url(/img/logos/android-128.png);
+    background-image: url(../img/logos/android-128.png);
 }
 .reveal .browser-support .mobile .safari {
-    background-image: url(/img/logos/mobile-safari-128.png);
+    background-image: url(../img/logos/mobile-safari-128.png);
 }
 .reveal .browser-support .not-yet {
     -webkit-filter: grayscale(1);
